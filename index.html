@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ultimate Fun App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root {
       --primary: #007aff;
@@ -22,27 +23,55 @@
     h1 {
       font-size: 2rem;
       font-weight: 600;
-      margin-bottom: 1.5rem;
-      color: #000; /* Ensures black */
+      margin-bottom: 1rem;
     }
 
-    .tab-button {
-      padding: 0.5rem 1rem;
-      margin: 0.25rem;
-      border: 1px solid #ccc;
-      border-radius: 12px;
-      background: #fff;
-      cursor: pointer;
+    /* Tab bar container */
+    .tab-bar {
+      position: relative;
+      display: flex;
+      justify-content: space-around;
+      background-color: #3a3a3c;
+      border-radius: 999px;
+      padding: 6px;
+      width: fit-content;
+      margin: 1.5rem auto 2rem;
+    }
+
+    /* Animated capsule */
+    .tab-indicator {
+      position: absolute;
+      height: 100%;
+      border-radius: 999px;
+      background: white;
+      z-index: 0;
+      transition: transform 0.3s ease, width 0.3s ease;
+    }
+
+    .tab-option {
+      position: relative;
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      color: #c4c4c6;
+      font-size: 1rem;
       font-weight: 500;
+      cursor: pointer;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .tab-button:hover {
-      background-color: #eaeaea;
+    .tab-option.active {
+      color: black;
     }
 
     .tab {
       display: none;
       margin-top: 2rem;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
     }
 
     .tab.active {
@@ -53,6 +82,7 @@
       max-width: 600px;
       margin: 2rem auto;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      opacity: 1;
     }
 
     button {
@@ -64,10 +94,6 @@
       background: #fff;
       cursor: pointer;
       font-weight: 500;
-    }
-
-    button:hover {
-      background: #f0f0f0;
     }
 
     .emoji-button {
@@ -84,25 +110,46 @@
       transform: scale(1.2);
       margin-right: 0.5rem;
     }
+
+    .memory-circles {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 1rem 0;
+    }
+
+    .memory-circle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      opacity: 0.5;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+
+    .memory-circle.highlight {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
   <h1>Ultimate Fun App</h1>
 
-  <div>
-    <button class="tab-button" onclick="switchTab('quote')">Quotes</button>
-    <button class="tab-button" onclick="switchTab('mood')">Mood</button>
-    <button class="tab-button" onclick="switchTab('sound')">Sounds</button>
-    <button class="tab-button" onclick="switchTab('memory')">Memory</button>
-    <button class="tab-button" onclick="switchTab('tap')">Tap Game</button>
-    <button class="tab-button" onclick="switchTab('habits')">Habits</button>
+  <div class="tab-bar" id="tabBar">
+    <div class="tab-indicator" id="tabIndicator"></div>
+    <button class="tab-option active" onclick="switchTab('tap', this)"><i class="fa-solid fa-bolt"></i>Tap</button>
+    <button class="tab-option" onclick="switchTab('memory', this)"><i class="fa-solid fa-brain"></i>Memory</button>
+    <button class="tab-option" onclick="switchTab('sound', this)"><i class="fa-solid fa-volume-up"></i>Sounds</button>
+    <button class="tab-option" onclick="switchTab('quote', this)"><i class="fa-solid fa-quote-left"></i>Quotes</button>
+    <button class="tab-option" onclick="switchTab('mood', this)"><i class="fa-solid fa-face-smile"></i>Mood</button>
+    <button class="tab-option" onclick="switchTab('habits', this)"><i class="fa-solid fa-list-check"></i>Habits</button>
   </div>
 
-  <div id="quote" class="tab active"></div>
-  <div id="mood" class="tab"></div>
-  <div id="sound" class="tab"></div>
+  <div id="tap" class="tab active"></div>
   <div id="memory" class="tab"></div>
-  <div id="tap" class="tab"></div>
+  <div id="sound" class="tab"></div>
+  <div id="quote" class="tab"></div>
+  <div id="mood" class="tab"></div>
   <div id="habits" class="tab"></div>
 
   <script src="app.js"></script>
