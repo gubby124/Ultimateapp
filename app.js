@@ -1,117 +1,172 @@
-// Tab Switching
-function switchTab(tabId) {
+function switchTab(tabId, button) {
+  // Update tab content
   document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active');
+  const tab = document.getElementById(tabId);
+  tab.classList.add('active');
+
+  // Animate tab indicator
+  const indicator = document.getElementById('tabIndicator');
+  const buttons = [...document.querySelectorAll('.tab-option')];
+  const index = buttons.indexOf(button);
+  buttons.forEach(btn => btn.classList.remove('active'));
+  button.classList.add('active');
+
+  const width = button.offsetWidth;
+  const offset = button.offsetLeft - button.parentElement.offsetLeft;
+  indicator.style.width = `${width}px`;
+  indicator.style.transform = `translateX(${offset}px)`;
 }
 
-// Quote Generator
-const quotes = [
-  "Stay hungry. Stay foolish.",
-  "Be yourself; everyone else is taken.",
-  "You miss 100% of the shots you don’t take.",
-  "Believe you can and you're halfway there.",
-  "The journey of a thousand miles begins with one step."
-];
-
+// Render each tab
 function renderQuote() {
   const container = document.getElementById('quote');
+  const quotes = [
+    "Stay hungry. Stay foolish.",
+    "Be yourself; everyone else is taken.",
+    "You miss 100% of the shots you don’t take.",
+    "Believe you can and you're halfway there.",
+    "The journey of a thousand miles begins with one step."
+  ];
   const p = document.createElement('p');
   const btn = document.createElement('button');
-  p.id = 'quote-text';
-  btn.innerText = 'New Quote';
+  p.innerText = quotes[0];
+  btn.innerText = "New Quote";
   btn.onclick = () => {
     p.innerText = quotes[Math.floor(Math.random() * quotes.length)];
   };
-  p.innerText = quotes[0];
-  container.innerHTML = '';
   container.appendChild(p);
   container.appendChild(btn);
 }
 
-// Mood Picker
 function renderMood() {
+  const moods = ["😄", "🙂", "😐", "☹️", "😢"];
   const container = document.getElementById('mood');
-  const moods = ['😄', '🙂', '😐', '☹️', '😢'];
-  const current = document.createElement('p');
+  const p = document.createElement('p');
   const row = document.createElement('div');
-  moods.forEach(m => {
+  moods.forEach(mood => {
     const span = document.createElement('span');
-    span.innerText = m;
-    span.style.fontSize = '40px';
-    span.style.margin = '10px';
-    span.style.cursor = 'pointer';
-    span.onclick = () => {
-      current.innerText = 'You selected: ' + m;
-    };
+    span.className = 'emoji-button';
+    span.innerText = mood;
+    span.onclick = () => { p.innerText = "You selected: " + mood; };
     row.appendChild(span);
   });
-  container.innerHTML = '<h2>How are you feeling?</h2>';
-  container.appendChild(row);
-  container.appendChild(current);
+  container.append("How are you feeling?", row, p);
 }
 
-// Soundboard
 function renderSounds() {
-  const container = document.getElementById('sound');
   const sounds = [
-    { label: 'Pop', url: 'https://www.fesliyanstudios.com/play-mp3/387' },
-    { label: 'Click', url: 'https://www.fesliyanstudios.com/play-mp3/3872' }
+    { label: "Pop", url: "https://www.fesliyanstudios.com/play-mp3/387" },
+    { label: "Click", url: "https://www.fesliyanstudios.com/play-mp3/3872" }
   ];
-  container.innerHTML = '<h2>Soundboard</h2>';
+  const container = document.getElementById('sound');
   sounds.forEach(sound => {
     const btn = document.createElement('button');
     btn.innerText = sound.label;
     btn.onclick = () => new Audio(sound.url).play();
     container.appendChild(btn);
-    container.appendChild(document.createElement('br'));
   });
 }
 
-// Memory Game (Placeholder)
-function renderMemory() {
-  const container = document.getElementById('memory');
-  container.innerHTML = '<h2>Memory Match</h2><p>(Coming soon...)</p>';
-}
-
-// Tap Game
 function renderTapGame() {
   const container = document.getElementById('tap');
-  container.innerHTML = '<h2>Tap Game</h2>';
   const score = document.createElement('p');
-  score.innerText = 'Score: 0';
   let count = 0;
-
+  score.innerText = 'Score: 0';
   const btn = document.createElement('button');
   btn.innerText = 'Tap Me!';
   btn.onclick = () => {
     count++;
     score.innerText = 'Score: ' + count;
   };
-
-  container.appendChild(score);
-  container.appendChild(btn);
+  container.append(score, btn);
 }
 
-// Habits
 function renderHabits() {
   const container = document.getElementById('habits');
   const habits = ['Drink Water', 'Exercise', 'Read 10 Pages'];
-  container.innerHTML = '<h2>Habits</h2>';
   habits.forEach(habit => {
     const label = document.createElement('label');
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
-    label.appendChild(checkbox);
-    label.append(' ' + habit);
-    container.appendChild(label);
-    container.appendChild(document.createElement('br'));
+    label.append(checkbox, " " + habit);
+    container.append(label, document.createElement('br'));
   });
 }
 
-// Initialize all tabs
+// Fully working memory match game
+function renderMemory() {
+  const container = document.getElementById('memory');
+  const colors = ['red', 'green', 'blue', 'yellow'];
+  let sequence = [];
+  let userInput = [];
+  let acceptingInput = false;
+  const status = document.createElement('p');
+  const row = document.createElement('div');
+  row.className = 'memory-circles';
+
+  const circles = colors.map((color, index) => {
+    const circle = document.createElement('div');
+    circle.className = 'memory-circle';
+    circle.style.backgroundColor = color;
+    circle.onclick = () => {
+      if (!acceptingInput) return;
+      userInput.push(index);
+      checkInput();
+    };
+    row.appendChild(circle);
+    return circle;
+  });
+
+  const btn = document.createElement('button');
+  btn.innerText = 'New Game';
+  btn.onclick = () => {
+    sequence = Array.from({ length: 5 }, () => Math.floor(Math.random() * 4));
+    userInput = [];
+    acceptingInput = false;
+    status.innerText = "Watch the pattern...";
+    flashSequence();
+  };
+
+  container.append(status, row, btn);
+
+  function flashSequence() {
+    sequence.forEach((index, i) => {
+      setTimeout(() => {
+        circles[index].classList.add('highlight');
+        setTimeout(() => {
+          circles[index].classList.remove('highlight');
+          if (i === sequence.length - 1) {
+            acceptingInput = true;
+            status.innerText = "Now you try!";
+          }
+        }, 400);
+      }, i * 600);
+    });
+  }
+
+  function checkInput() {
+    const current = userInput.length - 1;
+    if (userInput[current] !== sequence[current]) {
+      status.innerText = "Wrong! Try again.";
+      userInput = [];
+      acceptingInput = false;
+    } else if (userInput.length === sequence.length) {
+      status.innerText = "You got it!";
+      acceptingInput = false;
+    }
+  }
+}
+
+// Call all renderers
 renderQuote();
 renderMood();
 renderSounds();
-renderMemory();
 renderTapGame();
 renderHabits();
+renderMemory();
+
+// Initialize pill position on load
+window.onload = () => {
+  const active = document.querySelector('.tab-option.active');
+  if (active) switchTab(active.innerText.toLowerCase(), active);
+};
