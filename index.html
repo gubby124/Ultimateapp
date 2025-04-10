@@ -5,31 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ultimate Fun App</title>
   <style>
+    :root {
+      --primary: #007aff;
+      --gray: #f2f2f7;
+    }
+
     body {
-      font-family: system-ui, -apple-system, sans-serif;
       margin: 0;
       padding: 2rem;
-      background-color: #f8f8f8;
-      color: #222;
+      font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--gray);
+      color: #000;
       text-align: center;
     }
 
     h1 {
       font-size: 2rem;
-      margin-bottom: 1rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: #000; /* Ensures black */
     }
 
     .tab-button {
       padding: 0.5rem 1rem;
       margin: 0.25rem;
       border: 1px solid #ccc;
-      border-radius: 10px;
-      background: white;
+      border-radius: 12px;
+      background: #fff;
       cursor: pointer;
+      font-weight: 500;
     }
 
     .tab-button:hover {
-      background: #f0f0f0;
+      background-color: #eaeaea;
     }
 
     .tab {
@@ -40,11 +48,11 @@
     .tab.active {
       display: block;
       background: white;
-      border-radius: 10px;
-      padding: 1.5rem;
+      border-radius: 16px;
+      padding: 2rem;
       max-width: 600px;
-      margin: auto;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+      margin: 2rem auto;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
     }
 
     button {
@@ -52,14 +60,14 @@
       font-size: 1rem;
       margin: 0.5rem;
       border-radius: 8px;
-      border: none;
-      background: #007aff;
-      color: white;
+      border: 1px solid #ccc;
+      background: #fff;
       cursor: pointer;
+      font-weight: 500;
     }
 
     button:hover {
-      background: #005bbb;
+      background: #f0f0f0;
     }
 
     .emoji-button {
@@ -70,6 +78,11 @@
 
     label {
       font-size: 1rem;
+    }
+
+    input[type="checkbox"] {
+      transform: scale(1.2);
+      margin-right: 0.5rem;
     }
   </style>
 </head>
