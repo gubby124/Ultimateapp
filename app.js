@@ -1,10 +1,8 @@
 function switchTab(tabId, button) {
-  // Update tab content
   document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
   const tab = document.getElementById(tabId);
   tab.classList.add('active');
 
-  // Animate tab indicator
   const indicator = document.getElementById('tabIndicator');
   const buttons = [...document.querySelectorAll('.tab-option')];
   const index = buttons.indexOf(button);
@@ -17,7 +15,6 @@ function switchTab(tabId, button) {
   indicator.style.transform = `translateX(${offset}px)`;
 }
 
-// Render each tab
 function renderQuote() {
   const container = document.getElementById('quote');
   const quotes = [
@@ -34,8 +31,7 @@ function renderQuote() {
   btn.onclick = () => {
     p.innerText = quotes[Math.floor(Math.random() * quotes.length)];
   };
-  container.appendChild(p);
-  container.appendChild(btn);
+  container.append(p, btn);
 }
 
 function renderMood() {
@@ -93,7 +89,6 @@ function renderHabits() {
   });
 }
 
-// Fully working memory match game
 function renderMemory() {
   const container = document.getElementById('memory');
   const colors = ['red', 'green', 'blue', 'yellow'];
@@ -157,7 +152,7 @@ function renderMemory() {
   }
 }
 
-// Call all renderers
+// Render everything
 renderQuote();
 renderMood();
 renderSounds();
@@ -165,7 +160,6 @@ renderTapGame();
 renderHabits();
 renderMemory();
 
-// Initialize pill position on load
 window.onload = () => {
   const active = document.querySelector('.tab-option.active');
   if (active) switchTab(active.innerText.toLowerCase(), active);
