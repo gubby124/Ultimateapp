@@ -1,1 +1,1 @@
-a app i am working on with chatgpt
+an app i am working on with chatgpt
