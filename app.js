@@ -4,15 +4,23 @@ function switchTab(tabId, button) {
   tab.classList.add('active');
 
   const indicator = document.getElementById('tabIndicator');
-  const buttons = [...document.querySelectorAll('.tab-option')];
-  const index = buttons.indexOf(button);
-  buttons.forEach(btn => btn.classList.remove('active'));
+  const tabBar = document.getElementById('tabBar');
+
+  document.querySelectorAll('.tab-option').forEach(btn => btn.classList.remove('active'));
   button.classList.add('active');
 
+  const offset = button.offsetLeft - tabBar.offsetLeft;
   const width = button.offsetWidth;
-  const offset = button.offsetLeft - button.parentElement.offsetLeft;
   indicator.style.width = `${width}px`;
   indicator.style.transform = `translateX(${offset}px)`;
+}
+
+function playSound(id) {
+  const audio = document.getElementById(id);
+  if (audio) {
+    audio.currentTime = 0;
+    audio.play();
+  }
 }
 
 function renderQuote() {
@@ -22,7 +30,17 @@ function renderQuote() {
     "Be yourself; everyone else is taken.",
     "You miss 100% of the shots you don’t take.",
     "Believe you can and you're halfway there.",
-    "The journey of a thousand miles begins with one step."
+    "The journey of a thousand miles begins with one step.",
+    "Do or do not. There is no try.",
+    "The only way to do great work is to love what you do.",
+    "Happiness is not by chance, but by choice.",
+    "Strive not to be a success, but to be of value.",
+    "The best time to plant a tree was 20 years ago. The second best time is now.",
+    "Everything you can imagine is real.",
+    "Work hard in silence, let your success be your noise.",
+    "Doubt kills more dreams than failure ever will.",
+    "Big journeys begin with small steps.",
+    "Success is a journey, not a destination."
   ];
   const p = document.createElement('p');
   const btn = document.createElement('button');
@@ -34,59 +52,73 @@ function renderQuote() {
   container.append(p, btn);
 }
 
-function renderMood() {
-  const moods = ["😄", "🙂", "😐", "☹️", "😢"];
-  const container = document.getElementById('mood');
-  const p = document.createElement('p');
-  const row = document.createElement('div');
-  moods.forEach(mood => {
-    const span = document.createElement('span');
-    span.className = 'emoji-button';
-    span.innerText = mood;
-    span.onclick = () => { p.innerText = "You selected: " + mood; };
-    row.appendChild(span);
-  });
-  container.append("How are you feeling?", row, p);
-}
+function renderSettings() {
+  const container = document.getElementById('settings');
+  const nameInput = document.createElement('input');
+  nameInput.type = 'text';
+  nameInput.placeholder = 'Enter your name';
+  nameInput.value = localStorage.getItem('username') || '';
 
-function renderSounds() {
-  const sounds = [
-    { label: "Pop", url: "https://www.fesliyanstudios.com/play-mp3/387" },
-    { label: "Click", url: "https://www.fesliyanstudios.com/play-mp3/3872" }
-  ];
-  const container = document.getElementById('sound');
-  sounds.forEach(sound => {
-    const btn = document.createElement('button');
-    btn.innerText = sound.label;
-    btn.onclick = () => new Audio(sound.url).play();
-    container.appendChild(btn);
-  });
+  const avatarInput = document.createElement('input');
+  avatarInput.type = 'text';
+  avatarInput.placeholder = 'Enter emoji avatar';
+  avatarInput.value = localStorage.getItem('avatar') || '';
+
+  nameInput.onchange = () => {
+    localStorage.setItem('username', nameInput.value);
+  };
+  avatarInput.onchange = () => {
+    localStorage.setItem('avatar', avatarInput.value);
+    document.getElementById('avatar-display').innerText = avatarInput.value;
+  };
+
+  const darkModeToggle = document.createElement('input');
+  darkModeToggle.type = 'checkbox';
+  darkModeToggle.checked = localStorage.getItem('darkMode') === 'true';
+  darkModeToggle.onchange = () => {
+    const enabled = darkModeToggle.checked;
+    document.body.classList.toggle('dark', enabled);
+    localStorage.setItem('darkMode', enabled);
+  };
+
+  const darkModeLabel = document.createElement('label');
+  darkModeLabel.append(darkModeToggle, " Dark Mode");
+
+  const resetBtn = document.createElement('button');
+  resetBtn.innerText = "Reset All Data";
+  resetBtn.onclick = () => {
+    if (confirm("Are you sure? This will reset all saved data.")) {
+      localStorage.clear();
+      location.reload();
+    }
+  };
+
+  container.append("Your Name:", nameInput, "Your Avatar:", avatarInput, darkModeLabel, document.createElement('br'), resetBtn);
 }
 
 function renderTapGame() {
   const container = document.getElementById('tap');
-  const score = document.createElement('p');
-  let count = 0;
-  score.innerText = 'Score: 0';
+  const highScore = localStorage.getItem('tapHighScore') || 0;
+  let score = 0;
+
+  const scoreText = document.createElement('p');
+  const highScoreText = document.createElement('p');
   const btn = document.createElement('button');
+
+  scoreText.innerText = 'Score: 0';
+  highScoreText.innerText = 'High Score: ' + highScore;
   btn.innerText = 'Tap Me!';
   btn.onclick = () => {
-    count++;
-    score.innerText = 'Score: ' + count;
+    score++;
+    playSound('click-sound');
+    scoreText.innerText = 'Score: ' + score;
+    if (score > highScore) {
+      localStorage.setItem('tapHighScore', score);
+      highScoreText.innerText = 'High Score: ' + score;
+    }
   };
-  container.append(score, btn);
-}
 
-function renderHabits() {
-  const container = document.getElementById('habits');
-  const habits = ['Drink Water', 'Exercise', 'Read 10 Pages'];
-  habits.forEach(habit => {
-    const label = document.createElement('label');
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    label.append(checkbox, " " + habit);
-    container.append(label, document.createElement('br'));
-  });
+  container.append(scoreText, highScoreText, btn);
 }
 
 function renderMemory() {
@@ -95,6 +127,8 @@ function renderMemory() {
   let sequence = [];
   let userInput = [];
   let acceptingInput = false;
+  const highScore = parseInt(localStorage.getItem('memoryHighScore') || 0);
+
   const status = document.createElement('p');
   const row = document.createElement('div');
   row.className = 'memory-circles';
@@ -122,7 +156,10 @@ function renderMemory() {
     flashSequence();
   };
 
-  container.append(status, row, btn);
+  const scoreDisplay = document.createElement('p');
+  scoreDisplay.innerText = "Best Streak: " + highScore;
+
+  container.append(status, row, btn, scoreDisplay);
 
   function flashSequence() {
     sequence.forEach((index, i) => {
@@ -143,24 +180,62 @@ function renderMemory() {
     const current = userInput.length - 1;
     if (userInput[current] !== sequence[current]) {
       status.innerText = "Wrong! Try again.";
+      playSound('fail-sound');
       userInput = [];
       acceptingInput = false;
     } else if (userInput.length === sequence.length) {
       status.innerText = "You got it!";
+      playSound('success-sound');
       acceptingInput = false;
+      if (sequence.length > highScore) {
+        localStorage.setItem('memoryHighScore', sequence.length);
+        scoreDisplay.innerText = "Best Streak: " + sequence.length;
+      }
     }
   }
 }
 
-// Render everything
-renderQuote();
-renderMood();
-renderSounds();
-renderTapGame();
-renderHabits();
-renderMemory();
+function renderMood() {
+  const moods = ["😄", "🙂", "😐", "☹️", "😢"];
+  const container = document.getElementById('mood');
+  const p = document.createElement('p');
+  const row = document.createElement('div');
+  moods.forEach(mood => {
+    const span = document.createElement('span');
+    span.className = 'emoji-button';
+    span.innerText = mood;
+    span.onclick = () => { p.innerText = "You selected: " + mood; };
+    row.appendChild(span);
+  });
+  container.append("How are you feeling?", row, p);
+}
 
+function renderHabits() {
+  const container = document.getElementById('habits');
+  const habits = ['Drink Water', 'Exercise', 'Read 10 Pages'];
+  habits.forEach(habit => {
+    const label = document.createElement('label');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    label.append(checkbox, " " + habit);
+    container.append(label, document.createElement('br'));
+  });
+}
+
+// INIT ALL
+renderQuote();
+renderTapGame();
+renderMemory();
+renderSounds();
+renderMood();
+renderHabits();
+renderSettings();
+
+// Restore preferences on load
 window.onload = () => {
   const active = document.querySelector('.tab-option.active');
   if (active) switchTab(active.innerText.toLowerCase(), active);
+  if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark');
+  const avatar = localStorage.getItem('avatar');
+  if (avatar) document.getElementById('avatar-display').innerText = avatar;
 };
