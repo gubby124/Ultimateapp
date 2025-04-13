@@ -1,17 +1,16 @@
 function switchTab(tabId, button) {
   document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-  const tab = document.getElementById(tabId);
-  tab.classList.add('active');
-
-  const indicator = document.getElementById('tabIndicator');
-  const tabBar = document.getElementById('tabBar');
+  document.getElementById(tabId).classList.add('active');
 
   document.querySelectorAll('.tab-option').forEach(btn => btn.classList.remove('active'));
   button.classList.add('active');
 
-  const offset = button.offsetLeft - tabBar.offsetLeft;
-  const width = button.offsetWidth;
-  indicator.style.width = `${width}px`;
+  const indicator = document.getElementById('tabIndicator');
+  const tabRect = button.getBoundingClientRect();
+  const barRect = document.getElementById('tabBar').getBoundingClientRect();
+  const offset = tabRect.left - barRect.left;
+
+  indicator.style.width = `${tabRect.width}px`;
   indicator.style.transform = `translateX(${offset}px)`;
 }
 
