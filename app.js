@@ -194,40 +194,11 @@ function renderMemory() {
   }
 }
 
-function renderMood() {
-  const moods = ["😄", "🙂", "😐", "☹️", "😢"];
-  const container = document.getElementById('mood');
-  const p = document.createElement('p');
-  const row = document.createElement('div');
-  moods.forEach(mood => {
-    const span = document.createElement('span');
-    span.className = 'emoji-button';
-    span.innerText = mood;
-    span.onclick = () => { p.innerText = "You selected: " + mood; };
-    row.appendChild(span);
-  });
-  container.append("How are you feeling?", row, p);
-}
-
-function renderHabits() {
-  const container = document.getElementById('habits');
-  const habits = ['Drink Water', 'Exercise', 'Read 10 Pages'];
-  habits.forEach(habit => {
-    const label = document.createElement('label');
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    label.append(checkbox, " " + habit);
-    container.append(label, document.createElement('br'));
-  });
-}
-
 // INIT ALL
 renderQuote();
 renderTapGame();
 renderMemory();
 renderSounds();
-renderMood();
-renderHabits();
 renderSettings();
 
 // Restore preferences on load
