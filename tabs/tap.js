@@ -36,13 +36,16 @@ export function renderTap() {
   container.append(counter, highScoreDisplay, tapBtn, resetBtn);
 }
 
-// Submit to Firebase if it's a new high score
 function submitScoreToLeaderboard(score) {
   const username = localStorage.getItem('username') || "Player";
   const avatar = localStorage.getItem('avatar') || "🙂";
-
   const { db, firebaseTools } = window;
   const { collection, addDoc } = firebaseTools;
 
   addDoc(collection(db, "leaderboard"), {
     name: username,
+    score,
+    avatar,
+    timestamp: Date.now()
+  });
+}
