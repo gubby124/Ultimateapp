@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ultimate Fun App</title>
+
+  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <!-- Firebase SDK -->
@@ -38,7 +40,6 @@
 
   <style>
     :root {
-      --primary: #007aff;
       --gray: #f2f2f7;
       --dark: #1c1c1e;
     }
@@ -46,37 +47,37 @@
     body {
       margin: 0;
       padding: 2rem;
-      font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: system-ui, sans-serif;
       background-color: var(--gray);
       color: #000;
       text-align: center;
+      transition: background 0.3s ease;
     }
 
     body.dark {
-      background-color: var(--dark);
+      background: var(--dark);
       color: white;
     }
 
     .tab-bar {
-      position: relative;
       display: flex;
       justify-content: center;
       background: #3a3a3c;
       border-radius: 999px;
       padding: 4px;
-      margin: 1rem auto;
       width: fit-content;
+      margin: auto;
+      position: relative;
     }
 
     .tab-option {
-      position: relative;
-      padding: 10px 16px;
+      padding: 10px 20px;
       background: none;
       border: none;
       font-size: 1rem;
       color: white;
-      cursor: pointer;
       z-index: 1;
+      cursor: pointer;
     }
 
     .tab-option.active {
@@ -86,7 +87,6 @@
     .tab-indicator {
       position: absolute;
       top: 4px;
-      left: 0;
       height: calc(100% - 8px);
       background: white;
       border-radius: 999px;
@@ -101,11 +101,10 @@
     .tab.active {
       display: block;
       padding: 2rem;
-      max-width: 600px;
       margin: 2rem auto;
+      max-width: 600px;
       background: white;
       border-radius: 16px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     body.dark .tab.active {
@@ -113,8 +112,8 @@
     }
 
     button {
-      margin: 0.5rem;
       padding: 0.5rem 1rem;
+      margin: 0.5rem;
     }
 
     input {
@@ -129,12 +128,12 @@
 
   <div class="tab-bar" id="tabBar">
     <div class="tab-indicator" id="tabIndicator"></div>
-    <button class="tab-option active" onclick="switchTab('tap', this)">Tap</button>
-    <button class="tab-option" onclick="switchTab('memory', this)">Memory</button>
-    <button class="tab-option" onclick="switchTab('sound', this)">Sounds</button>
-    <button class="tab-option" onclick="switchTab('quote', this)">Quotes</button>
-    <button class="tab-option" onclick="switchTab('settings', this)">Settings</button>
-    <button class="tab-option" onclick="switchTab('leaderboard', this)">Leaderboard</button>
+    <button class="tab-option active" onclick="switchTab('tap', this)"><i class="fa-solid fa-bolt"></i> Tap</button>
+    <button class="tab-option" onclick="switchTab('memory', this)"><i class="fa-solid fa-brain"></i> Memory</button>
+    <button class="tab-option" onclick="switchTab('sound', this)"><i class="fa-solid fa-volume-up"></i> Sounds</button>
+    <button class="tab-option" onclick="switchTab('quote', this)"><i class="fa-solid fa-quote-left"></i> Quotes</button>
+    <button class="tab-option" onclick="switchTab('settings', this)"><i class="fa-solid fa-gear"></i> Settings</button>
+    <button class="tab-option" onclick="switchTab('leaderboard', this)"><i class="fa-solid fa-trophy"></i> Leaderboard</button>
   </div>
 
   <div id="tap" class="tab active"></div>
@@ -145,7 +144,6 @@
   <div id="leaderboard" class="tab"></div>
 
   <audio id="click-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-game-click-1114.mp3"></audio>
-
-  <script type="module" src="app.js?v=3"></script>
+  <script type="module" src="app.js?v=4"></script>
 </body>
 </html>
