@@ -6,7 +6,7 @@
   <title>Ultimate Fun App</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-  <!-- Firebase SDKs -->
+  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
@@ -20,7 +20,6 @@
       limit
     } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-    // Your actual Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyDqTFqEhuXq9yCaOVQGEyUe7-gf1jZoBSU",
       authDomain: "leaderboard-for-ultimate-app.firebaseapp.com",
@@ -31,7 +30,6 @@
       measurementId: "G-DWB604GPN1"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     window.db = getFirestore(app);
@@ -52,7 +50,6 @@
       background-color: var(--gray);
       color: #000;
       text-align: center;
-      transition: background-color 0.5s ease, color 0.5s ease;
     }
 
     body.dark {
@@ -60,28 +57,30 @@
       color: white;
     }
 
-    h1 {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-    }
-
-    #avatar-display {
-      font-size: 2.2rem;
-      margin-bottom: 0.25rem;
-    }
-
     .tab-bar {
       position: relative;
       display: flex;
       justify-content: center;
-      align-items: center;
-      background-color: #3a3a3c;
+      background: #3a3a3c;
       border-radius: 999px;
       padding: 4px;
+      margin: 1rem auto;
       width: fit-content;
-      margin: 1.5rem auto 2rem;
-      overflow: hidden;
+    }
+
+    .tab-option {
+      position: relative;
+      padding: 10px 16px;
+      background: none;
+      border: none;
+      font-size: 1rem;
+      color: white;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    .tab-option.active {
+      color: black;
     }
 
     .tab-indicator {
@@ -89,110 +88,53 @@
       top: 4px;
       left: 0;
       height: calc(100% - 8px);
-      border-radius: 999px;
       background: white;
+      border-radius: 999px;
+      transition: 0.3s ease;
       z-index: 0;
-      transition: transform 0.3s ease, width 0.3s ease;
-      will-change: transform, width;
-    }
-
-    .tab-option {
-      position: relative;
-      padding: 8px 16px;
-      border: none;
-      background: transparent;
-      color: #c4c4c6;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .tab-option.active {
-      color: black;
-    }
-
-    body.dark .tab-option.active {
-      color: #1c1c1e;
     }
 
     .tab {
       display: none;
-      margin-top: 2rem;
-      opacity: 0;
-      transition: opacity 0.3s ease-in-out;
     }
 
     .tab.active {
       display: block;
-      background: white;
-      border-radius: 16px;
       padding: 2rem;
       max-width: 600px;
       margin: 2rem auto;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-      opacity: 1;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     body.dark .tab.active {
       background: #2c2c2e;
-      color: white;
     }
 
     button {
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
       margin: 0.5rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      background: #fff;
-      cursor: pointer;
-      font-weight: 500;
+      padding: 0.5rem 1rem;
     }
 
-    input[type="checkbox"], input[type="text"], input[type="number"] {
-      margin: 10px;
-      padding: 6px;
-      font-size: 1rem;
-    }
-
-    .memory-circles {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin: 1rem 0;
-    }
-
-    .memory-circle {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      opacity: 0.5;
-      cursor: pointer;
-      transition: opacity 0.2s ease;
-    }
-
-    .memory-circle.highlight {
-      opacity: 1;
-      box-shadow: 0 0 10px #0002;
+    input {
+      padding: 0.5rem;
+      margin: 0.5rem;
     }
   </style>
 </head>
 <body>
-  <div id="avatar-display"></div>
   <h1>Ultimate Fun App</h1>
+  <div id="avatar-display"></div>
 
   <div class="tab-bar" id="tabBar">
     <div class="tab-indicator" id="tabIndicator"></div>
-    <button class="tab-option active" onclick="switchTab('tap', this)"><i class="fa-solid fa-bolt"></i>Tap</button>
-    <button class="tab-option" onclick="switchTab('memory', this)"><i class="fa-solid fa-brain"></i>Memory</button>
-    <button class="tab-option" onclick="switchTab('sound', this)"><i class="fa-solid fa-volume-up"></i>Sounds</button>
-    <button class="tab-option" onclick="switchTab('quote', this)"><i class="fa-solid fa-quote-left"></i>Quotes</button>
-    <button class="tab-option" onclick="switchTab('settings', this)"><i class="fa-solid fa-gear"></i>Settings</button>
-    <button class="tab-option" onclick="switchTab('leaderboard', this)"><i class="fa-solid fa-trophy"></i>Leaderboard</button>
+    <button class="tab-option active" onclick="switchTab('tap', this)">Tap</button>
+    <button class="tab-option" onclick="switchTab('memory', this)">Memory</button>
+    <button class="tab-option" onclick="switchTab('sound', this)">Sounds</button>
+    <button class="tab-option" onclick="switchTab('quote', this)">Quotes</button>
+    <button class="tab-option" onclick="switchTab('settings', this)">Settings</button>
+    <button class="tab-option" onclick="switchTab('leaderboard', this)">Leaderboard</button>
   </div>
 
   <div id="tap" class="tab active"></div>
@@ -202,12 +144,8 @@
   <div id="settings" class="tab"></div>
   <div id="leaderboard" class="tab"></div>
 
-  <!-- Audio -->
   <audio id="click-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-game-click-1114.mp3"></audio>
-  <audio id="success-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-positive-interface-beep-221.mp3"></audio>
-  <audio id="fail-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"></audio>
 
-  <!-- Main App Modules -->
-  <script type="module" src="app.js"></script>
+  <script type="module" src="app.js?v=3"></script>
 </body>
 </html>
