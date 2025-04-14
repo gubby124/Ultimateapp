@@ -6,12 +6,13 @@ export function renderQuotes() {
     "You miss 100% of the shots you don’t take.",
     "Success is a journey, not a destination."
   ];
-  const p = document.createElement('p');
+  const quote = document.createElement('p');
   const btn = document.createElement('button');
-  p.innerText = quotes[0];
   btn.innerText = "New Quote";
   btn.onclick = () => {
-    p.innerText = quotes[Math.floor(Math.random() * quotes.length)];
+    quote.innerText = quotes[Math.floor(Math.random() * quotes.length)];
   };
-  container.append(p, btn);
+  btn.onclick();
+  container.innerHTML = "<h2>Quotes</h2>";
+  container.append(quote, btn);
 }
