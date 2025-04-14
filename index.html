@@ -20,6 +20,7 @@
       limit
     } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
+    // Your actual Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyDqTFqEhuXq9yCaOVQGEyUe7-gf1jZoBSU",
       authDomain: "leaderboard-for-ultimate-app.firebaseapp.com",
@@ -30,6 +31,7 @@
       measurementId: "G-DWB604GPN1"
     };
 
+    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     window.db = getFirestore(app);
@@ -205,7 +207,7 @@
   <audio id="success-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-positive-interface-beep-221.mp3"></audio>
   <audio id="fail-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"></audio>
 
-  <!-- Load Main App -->
+  <!-- Main App Modules -->
   <script type="module" src="app.js"></script>
 </body>
 </html>
