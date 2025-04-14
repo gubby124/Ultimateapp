@@ -1,3 +1,5 @@
+import { generateRandomName } from './namegen.js';
+
 export function renderLeaderboard() {
   const container = document.getElementById('leaderboard');
   container.innerHTML = "<h2>Leaderboard</h2>";
@@ -5,7 +7,6 @@ export function renderLeaderboard() {
   const scoreInput = document.createElement('input');
   scoreInput.placeholder = "Enter your score";
   scoreInput.type = "number";
-  scoreInput.id = "score-input";
 
   const submitBtn = document.createElement('button');
   submitBtn.innerText = "Submit Score";
@@ -14,9 +15,8 @@ export function renderLeaderboard() {
 
   container.append(scoreInput, submitBtn, document.createElement('hr'), list);
 
-  // Submit score to Firebase
   submitBtn.onclick = async () => {
-    const username = localStorage.getItem('username') || generateFallbackName();
+    const username = localStorage.getItem('username') || generateRandomName();
     const avatar = localStorage.getItem('avatar') || "🙂";
     const score = parseInt(scoreInput.value);
 
@@ -44,7 +44,6 @@ export function renderLeaderboard() {
     }
   };
 
-  // Load and display top scores
   async function loadLeaderboard() {
     const { db, firebaseTools } = window;
     const { collection, getDocs, query, orderBy, limit } = firebaseTools;
@@ -64,15 +63,6 @@ export function renderLeaderboard() {
       console.error("Error loading leaderboard:", err);
       list.innerHTML = "<li>Unable to load leaderboard.</li>";
     }
-  }
-
-  // Fallback name if user hasn't chosen one
-  function generateFallbackName() {
-    const adjectives = ["Quick", "Clever", "Chill", "Sneaky"];
-    const animals = ["Fox", "Koala", "Eagle", "Otter"];
-    return adjectives[Math.floor(Math.random() * adjectives.length)] +
-           animals[Math.floor(Math.random() * animals.length)] +
-           Math.floor(Math.random() * 100);
   }
 
   loadLeaderboard();
